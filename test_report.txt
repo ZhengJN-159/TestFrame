@@ -1,0 +1,68 @@
+Test Report - Sun Jul 28 17:21:47 2024
+
+=============================
+Test Case: DatabaseTestFixture.TestInsertAndQuery
+Status: Passed
+----------------------
+Test Case: SampleTest.EqualInts
+Status: Passed
+----------------------
+Test Case: SampleTest.NotEqualInts
+Status: Passed
+----------------------
+Test Case: SampleTest.LessThan
+Status: Passed
+----------------------
+Test Case: SampleTest.LessThanOrEqual
+Status: Passed
+----------------------
+Test Case: SampleTest.GreaterThan
+Status: Passed
+----------------------
+Test Case: SampleTest.GreaterThanOrEqual
+Status: Failed
+Failures:
+  - Assertion failed: 1 < 2
+----------------------
+Test Case: SampleTest.NearEqual
+Status: Passed
+----------------------
+Test Case: SampleTest.ThrowsException
+Status: Passed
+----------------------
+Test Case: SampleTest.NoThrowException
+Status: Passed
+----------------------
+Test Case: SampleTest.ExpectTest
+Status: Failed
+Failures:
+  - Expectation failed: expected 0, but got 1
+----------------------
+Test Case: ParameterizedTest.Equals
+Status: Failed
+Failures:
+  - Assertion failed: param < 3
+  - Assertion failed: param < 3
+  - Assertion failed: param < 3
+----------------------
+Test Case: SampleTest.DurationLessThan
+Status: Passed
+----------------------
+Test Case: MyTestFixture.TestWithFixture
+Status: Passed
+----------------------
+Test Case: SampleTest.TrueIsTrue2
+Status: Passed
+----------------------
+Test Case: SampleTest.FalseIsFalse2
+Status: Passed
+----------------------
+Test Case: SampleTest.TrueIsTrue
+Status: Passed
+----------------------
+Test Case: SampleTest.FalseIsFalse
+Status: Passed
+----------------------
+Total tests: 18
+Passed tests: 15
+Failed tests: 3

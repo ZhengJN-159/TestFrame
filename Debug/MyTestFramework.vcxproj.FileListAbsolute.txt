@@ -1,0 +1,2 @@
+D:\study\MyTestFramework\Debug\MyTestFramework.exe
+D:\study\MyTestFramework\Debug\MyTestFramework.pdb
