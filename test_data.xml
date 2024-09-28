@@ -1,0 +1,17 @@
+<tests>
+    <test>
+        <paramA>1</paramA>
+        <param2>2</param2>
+        <param3>3</param3>
+    </test>
+    <test>
+		<paramA>4</paramA>
+        <param2>5</param2>
+        <param3>9</param3>
+    </test>
+    <test>
+		<paramA>3</paramA>
+        <param2>3</param2>
+        <param3>6</param3>
+    </test>
+</tests>

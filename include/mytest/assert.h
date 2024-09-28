@@ -5,6 +5,7 @@
 #include <iostream>
 #include "test_case.h"
 #include "unit_test.h"
+#include "mock.h"
 
 #ifdef _WIN32
 #define SET_CONSOLE_COLOR_RED() setConsoleColor(FOREGROUND_RED)
@@ -360,4 +361,132 @@
             } \
         } \
     }
+
+
+#define EXPECT_CALL(mock_obj, method) \
+    mock_obj.expect_call(#method)
+
+#define WILL_RETURN(mock_obj, method, returnValue) \
+    mock_obj.will_return(#method, returnValue)
+
+#define WILL_THROW(mock_obj, method, exception) \
+    mock_obj.will_throw(#method, exception)
+
+
+
+//template<typename T>
+//std::any to_any(const T& value) {
+//    return std::any(value);
+//}
+//
+//template<typename... Args>
+//std::vector<std::any> make_any_vector(Args&&... args) {
+//    return { to_any(std::forward<Args>(args))... };
+//}
+//#define MOCK_METHOD(methodName, returnType, ...) \
+//    returnType methodName(__VA_ARGS__) override { \
+//        std::vector<std::any> args = { __VA_ARGS__ }; \
+//        this->recordCall(#methodName, args); \
+//        return this->get_return_value<returnType>(#methodName); \
+//    }
+
+
+
+ //定义不同参数数量的宏
+#define MOCK_METHOD0(methodName, returnType) \
+    returnType methodName() override { \
+        this->recordCall(#methodName, std::vector<std::any>{}); \
+        return this->get_return_value<returnType>(#methodName); \
+    }
+
+#define MOCK_METHOD1(methodName, returnType, arg1Type, arg1Name) \
+    returnType methodName(arg1Type arg1Name) override { \
+        std::vector<std::any> args = {std::any(arg1Name)}; \
+        this->recordCall(#methodName, args); \
+        return this->get_return_value<returnType>(#methodName); \
+    }
+
+#define MOCK_METHOD2(methodName, returnType, arg1Type, arg1Name, arg2Type, arg2Name) \
+    returnType methodName(arg1Type arg1Name, arg2Type arg2Name) override { \
+        std::vector<std::any> args = {std::any(arg1Name), std::any(arg2Name)}; \
+        this->recordCall(#methodName, args); \
+        return this->get_return_value<returnType>(#methodName); \
+    }
+
+#define MOCK_METHOD3(methodName, returnType, arg1Type, arg1Name, arg2Type, arg2Name, arg3Type, arg3Name) \
+    returnType methodName(arg1Type arg1Name, arg2Type arg2Name, arg3Type arg3Name) override { \
+        std::vector<std::any> args = {std::any(arg1Name), std::any(arg2Name), std::any(arg3Name)}; \
+        this->recordCall(#methodName, args); \
+        return this->get_return_value<returnType>(#methodName); \
+    }
+
+#define MOCK_METHOD4(methodName, returnType, arg1Type, arg1Name, arg2Type, arg2Name, arg3Type, arg3Name, arg4Type, arg4Name) \
+    returnType methodName(arg1Type arg1Name, arg2Type arg2Name, arg3Type arg3Name, arg4Type arg4Name) override { \
+        std::vector<std::any> args = {std::any(arg1Name), std::any(arg2Name), std::any(arg3Name), std::any(arg4Name)}; \
+        this->recordCall(#methodName, args); \
+        return this->get_return_value<returnType>(#methodName); \
+    }
+
+#define MOCK_METHOD5(methodName, returnType, arg1Type, arg1Name, arg2Type, arg2Name, arg3Type, arg3Name, arg4Type, arg4Name, arg5Type, arg5Name) \
+    returnType methodName(arg1Type arg1Name, arg2Type arg2Name, arg3Type arg3Name, arg4Type arg4Name, arg5Type arg5Name) override { \
+        std::vector<std::any> args = {std::any(arg1Name), std::any(arg2Name), std::any(arg3Name), std::any(arg4Name), std::any(arg5Name)}; \
+        this->recordCall(#methodName, args); \
+        return this->get_return_value<returnType>(#methodName); \
+    }
+
+#define MOCK_METHOD6(methodName, returnType, arg1Name, arg2Type, arg2Name, arg3Type, arg3Name, arg4Type, arg4Name, arg5Type, arg5Name, arg6Type, arg6Name) \
+    returnType methodName(arg1Type arg1Name, arg2Type arg2Name, arg3Type arg3Name, arg4Type arg4Name, arg5Type arg5Name, arg6Type arg6Name) override { \
+        std::vector<std::any> args = {std::any(arg1Name), std::any(arg2Name), std::any(arg3Name), std::any(arg4Name), std::any(arg5Name), std::any(arg6Name)}; \
+        this->recordCall(#methodName, args); \
+        return this->get_return_value<returnType>(#methodName); \
+    }
+
+#define MOCK_CONST_METHOD0(methodName, returnType) \
+    returnType methodName() const override { \
+        this->recordCall(#methodName, std::vector<std::any>{}); \
+        return this->get_return_value_impl<returnType>(#methodName); \
+    }
+
+#define MOCK_CONST_METHOD1(methodName, returnType, arg1Type, arg1Name) \
+    returnType methodName(arg1Type arg1Name) const override { \
+        std::vector<std::any> args = {std::any(arg1Name)}; \
+        this->recordCall(#methodName, args); \
+        return this->get_return_value_impl<returnType>(#methodName); \
+    }
+
+#define MOCK_CONST_METHOD2(methodName, returnType, arg1Type, arg1Name, arg2Type, arg2Name) \
+    returnType methodName(arg1Type arg1Name, arg2Type arg2Name) const override { \
+        std::vector<std::any> args = {std::any(arg1Name), std::any(arg2Name)}; \
+        this->recordCall(#methodName, args); \
+        return this->get_return_value_impl<returnType>(#methodName); \
+    }
+
+#define MOCK_CONST_METHOD3(methodName, returnType, arg1Type, arg1Name, arg2Type, arg2Name, arg3Type, arg3Name) \
+    returnType methodName(arg1Type arg1Name, arg2Type arg2Name, arg3Type arg3Name) const override { \
+        std::vector<std::any> args = {std::any(arg1Name), std::any(arg2Name), std::any(arg3Name)}; \
+        this->recordCall(#methodName, args); \
+        return this->get_return_value_impl<returnType>(#methodName); \
+    }
+#define MOCK_CONST_METHOD4(methodName, returnType, arg1Name, arg2Type, arg2Name, arg3Type, arg3Name, arg4Type, arg4Name) \
+    returnType methodName(arg1Type arg1Name, arg2Type arg2Name, arg3Type arg3Name, arg4Type arg4Name) const override { \
+        std::vector<std::any> args = {std::any(arg1Name), std::any(arg2Name), std::any(arg3Name), std::any(arg4Name)}; \
+        this->recordCall(#methodName, args); \
+        return this->get_return_value_impl<returnType>(#methodName); \
+    }
+
+#define MOCK_CONST_METHOD5(methodName, returnType, arg1Name, arg2Type, arg2Name, arg3Type, arg3Name, arg4Type, arg4Name, arg5Type, arg5Name) \
+    returnType methodName(arg1Type arg1Name, arg2Type arg2Name, arg3Type arg3Name, arg4Type arg4Name, arg5Type arg5Name) const override { \
+        std::vector<std::any> args = {std::any(arg1Name), std::any(arg2Name), std::any(arg3Name), std::any(arg4Name), std::any(arg5Name)}; \
+        this->recordCall(#methodName, args); \
+        return this->get_return_value_impl<returnType>(#methodName); \
+    }
+
+#define MOCK_CONST_METHOD6(methodName, returnType, arg1Name, arg2Type, arg2Name, arg3Type, arg3Name, arg4Type, arg4Name, arg5Type, arg5Name, arg6Type, arg6Name) \
+    returnType methodName(arg1Type arg1Name, arg2Type arg2Name, arg3Type arg3Name, arg4Type arg4Name, arg5Type arg5Name, arg6Type arg6Name) const override { \
+        std::vector<std::any> args = {std::any(arg1Name), std::any(arg2Name), std::any(arg3Name), std::any(arg4Name), std::any(arg5Name), std::any(arg6Name)}; \
+        this->recordCall(#methodName, args); \
+        return this->get_return_value_impl<returnType>(#methodName); \
+    }
+
+
 #endif // MYTEST_ASSERT_H

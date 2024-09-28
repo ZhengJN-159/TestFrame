@@ -30,7 +30,10 @@ public:
     void addTestCaseToSuite(const std::string& suiteName, const TestCase& testCase) {
         testSuites[suiteName].addTestCase(testCase);
     }
-
+    //template<typename ParamType>
+    //void addParameterizedTest(const std::string& testName, const std::function<void(ParamType)>& func) {
+    //    addTestCase(TestCase(testName, [=]() { func(ParamType()); })); // 或者传入有效参数
+    //}
     void addParameterizedTest(const std::string& testName, const std::function<void()>& func) {
         // 将参数化测试作为普通测试用例添加
         addTestCase(TestCase(testName, func));
@@ -45,11 +48,11 @@ public:
 
 
 
-    int runAllTests() {
+    int runAllTests(const std::string& file_path) {
         int failed_tests = 0;
         int total_tests = 0;
 
-        std::ofstream report("test_report.txt");
+        std::ofstream report(file_path);
         auto now = std::time(nullptr);
         report << "Test Report - " << std::ctime(&now) << "\n";
         report << "=============================\n";
@@ -64,29 +67,7 @@ public:
             recordTestCase(report, testCase);
         }
 
-        //for (auto& testCase : testCases) {
-        //    for (auto* listener : listeners) {
-        //        listener->OnTestStart(testCase.getName());
-        //    }
-
-        //    testCase.run();
-        //    ++total_tests;
-
-        //    for (auto* listener : listeners) {
-        //        listener->OnTestEnd(testCase.getName(), !testCase.failed());
-        //    }
-
-        //    if (testCase.failed()) {
-        //        ++failed_tests;
-        //        for (auto* listener : listeners) {
-        //            for (const auto& failure : testCase.getFailureMessage()) {
-        //                listener->OnTestFailure(testCase.getName(), failure);
-        //            }
-
-        //        }
-        //    }
-        //}
-
+   
 
         // Run test suites
         for (auto& suitePair : testSuites) {

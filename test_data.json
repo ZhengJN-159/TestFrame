@@ -1,0 +1,17 @@
+[
+  {
+    "param1": 1,
+    "param2": 2,
+    "param3": 3
+  },
+  {
+    "param1": 10,
+    "param2": 20,
+    "param3": 40
+  },
+  {
+    "param1": 5,
+    "param2": 10,
+    "param3": 15
+  }
+]
