@@ -1,68 +1,17 @@
-Test Report - Sun Jul 28 17:21:47 2024
+Test Report - Sat Sep 28 19:53:23 2024
 
 =============================
-Test Case: DatabaseTestFixture.TestInsertAndQuery
-Status: Passed
-----------------------
-Test Case: SampleTest.EqualInts
-Status: Passed
-----------------------
-Test Case: SampleTest.NotEqualInts
-Status: Passed
-----------------------
-Test Case: SampleTest.LessThan
-Status: Passed
-----------------------
-Test Case: SampleTest.LessThanOrEqual
-Status: Passed
-----------------------
-Test Case: SampleTest.GreaterThan
-Status: Passed
-----------------------
-Test Case: SampleTest.GreaterThanOrEqual
+Test Case: MyTest.ComplexEquals
 Status: Failed
 Failures:
-  - Assertion failed: 1 < 2
+  - Expectation failed: expected param1 + param2, but got param3
 ----------------------
-Test Case: SampleTest.NearEqual
+Test Case: MyTest.ComplexEquals_CSV
 Status: Passed
 ----------------------
-Test Case: SampleTest.ThrowsException
+Test Case: MyTest.ComplexEquals_XML
 Status: Passed
 ----------------------
-Test Case: SampleTest.NoThrowException
-Status: Passed
-----------------------
-Test Case: SampleTest.ExpectTest
-Status: Failed
-Failures:
-  - Expectation failed: expected 0, but got 1
-----------------------
-Test Case: ParameterizedTest.Equals
-Status: Failed
-Failures:
-  - Assertion failed: param < 3
-  - Assertion failed: param < 3
-  - Assertion failed: param < 3
-----------------------
-Test Case: SampleTest.DurationLessThan
-Status: Passed
-----------------------
-Test Case: MyTestFixture.TestWithFixture
-Status: Passed
-----------------------
-Test Case: SampleTest.TrueIsTrue2
-Status: Passed
-----------------------
-Test Case: SampleTest.FalseIsFalse2
-Status: Passed
-----------------------
-Test Case: SampleTest.TrueIsTrue
-Status: Passed
-----------------------
-Test Case: SampleTest.FalseIsFalse
-Status: Passed
-----------------------
-Total tests: 18
-Passed tests: 15
-Failed tests: 3
+Total tests: 3
+Passed tests: 2
+Failed tests: 1

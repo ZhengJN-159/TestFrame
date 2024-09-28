@@ -38,39 +38,24 @@
     } \
     void test_case_name##_##test_name()
 
-//#define TEST_P(test_case_name, test_name, param_type) \
-//    void test_case_name##_##test_name##_Func(param_type param); \
-//    namespace { \
-//        struct test_case_name##_##test_name##_Registrator { \
-//            test_case_name##_##test_name##_Registrator() { \
-//                UnitTest::getInstance().addParameterizedTest(#test_case_name "." #test_name, [=]() { \
-//                    for (const auto& param : get_##test_case_name##_##test_name##_Params()) { \
-//                        test_case_name##_##test_name##_Func(param); \
-//                    } \
-//                }); \
-//            } \
-//        }; \
-//        static test_case_name##_##test_name##_Registrator test_case_name##_##test_name##_registrator; \
-//        std::vector<param_type>& get_##test_case_name##_##test_name##_Params(); \
-//    } \
-//    void test_case_name##_##test_name##_Func(param_type param)
-
-#define TEST_P(test_case_name, test_name, param_type) \
+#define TEST_P(test_case_name, test_name, param_type, file_path, loader_func) \
     void test_case_name##_##test_name##_Func(param_type param); \
     namespace { \
         struct test_case_name##_##test_name##_Registrator { \
             test_case_name##_##test_name##_Registrator() { \
                 UnitTest::getInstance().addParameterizedTest(#test_case_name "." #test_name, [=]() { \
-                    for (const auto& param : get_##test_case_name##_##test_name##_Params()) { \
+                    auto params = loader_func(file_path); \
+                    for (const auto& param : params) { \
                         test_case_name##_##test_name##_Func(param); \
                     } \
                 }); \
             } \
         }; \
         static test_case_name##_##test_name##_Registrator test_case_name##_##test_name##_registrator; \
-        std::vector<param_type>& get_##test_case_name##_##test_name##_Params(); \
     } \
     void test_case_name##_##test_name##_Func(param_type param)
+
+
 
 // ÃÌº”≤‚ ‘º–æﬂ∫Í
 #define TEST_F(fixture_name, test_name) \

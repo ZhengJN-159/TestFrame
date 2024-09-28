@@ -7,9 +7,12 @@ MyTestFramework 是一个轻量级的 C++ 单元测试框架。
 
 ## 特性
 
-- **断言**：提供多种断言宏，用于布尔条件、相等、不相等、比较、近似相等和异常处理。
-- **参数化测试**：支持参数化测试。
-- **测试夹具**：支持复杂的测试夹具，用于设置和拆除测试环境。
+- **基本断言**：提供多种断言宏，支持布尔条件、相等、不等、比较、近似相等和异常处理等。
+- **测试夹具**：支持复杂的测试夹具，以便在不同测试间共享设置和状态。
+- **参数化测试**：通过 `TEST_P` 宏实现参数化测试，支持从外部文件加载测试数据（如 JSON、CSV、XML）。
+- **模拟功能**：提供 `EXPECT_CALL`、`MOCK_METHOD` 等宏，支持灵活的模拟功能。
+- **模块接口测试**：专注于模块之间接口的测试，确保模块间的正确交互。
+- **测试报告**：自动生成测试报告，方便查看测试结果。
 
 ## 安装
 
@@ -40,7 +43,7 @@ MyTestFramework 是一个轻量级的 C++ 单元测试框架。
 
 ## 使用（具体示例可见"tests\sample_test.cpp"）
 
-### 编写测试
+### 编写简单测试用例
 
 在 `tests` 目录中创建测试文件。每个测试文件应包含必要的头文件并定义测试用例。示例如下：
 
@@ -51,7 +54,12 @@ TEST(SampleTest, BasicAssertions) {
     ASSERT_EQ(1 + 1, 2);
     ASSERT_TRUE(true);
 }
+
 ```
+ASSERT_EQ、ASSERT_TRUE 用于验证相等性、真假性。
+每个测试用例以 TEST 宏定义。
+
+
 
 ### 参数化测试
 
@@ -60,12 +68,21 @@ TEST(SampleTest, BasicAssertions) {
 ```cpp
 #include "mytest.h"
 
-TEST_P(MyTest, MyParameterizedTest) {
-    int param = GetParam();
-    ASSERT_TRUE(param % 2 == 0);
+using ParamType = std::map<std::string, int>;
+
+TEST_P(MyTest, ComplexEquals, ParamType, "test_data.json", DataLoader::loadJSON) {
+    int param1 = param.at("param1");
+    int param2 = param.at("param2");
+    int param3 = param.at("param3");
+    EXPECT_EQ(param1 + param2, param3);  // 验证 param1 + param2 是否等于 param3
 }
 
 ```
+TEST_P 用于定义参数化测试。
+通过 DataLoader 从 JSON 文件（CSV、XML)加载数据。
+测试逻辑检查数据中的 param1 和 param2 的和是否等于 param3。
+
+
 
 ### 测试夹具
 
@@ -74,32 +91,90 @@ TEST_P(MyTest, MyParameterizedTest) {
 ```cpp
 #include "mytest.h"
 
-class MyFixture : public TestFixture {
-protected:
+class MyComplexFixture : public TestFixtureTemplate<MyComplexFixture> {
+public:
     void SetUp() override {
-        // 设置代码
+        calculator = new Calculate();   // 初始化 Calculate 对象
+        statistics = new Statistics();   // 初始化 Statistics 对象
     }
 
     void TearDown() override {
-        // 清理代码
+        delete calculator;   // 清理资源
+        delete statistics;
     }
+
+    Calculate* calculator;
+    Statistics* statistics;
 };
 
-TEST_F(MyFixture, TestName) {
-    ASSERT_TRUE(true);
+TEST_F(MyComplexFixture, CalculatorAddTest) {
+    EXPECT_EQ(7, calculator->Add(3, 4));  // 验证加法结果
 }
+
 ```
+MyComplexFixture 是一个测试夹具，提供了测试所需的共享资源。
+SetUp 和 TearDown 方法用于初始化和清理资源。
+TEST_F 宏用于在夹具中定义测试用例。
+
+### 测试套件
+
+使用测试夹具来设置和拆除公共的测试资源：
+
+```cpp
+#include "mytest.h"
+
+TEST_SUITE(SampleSuite);
+
+TEST_IN_SUITE(SampleSuite, SampleTest, TrueIsTrue) {
+    ASSERT_TRUE(true);  // 验证条件为真
+}
+
+```
+TEST_SUITE 定义了一个测试套件。
+TEST_IN_SUITE 用于在指定套件中定义测试用例。
+
+
+### 接口测试
+
+使用测试夹具来设置和拆除公共的测试资源：
+
+```cpp
+#include "mytest.h"
+
+class MockParent : public Parent, public Mock<MockParent> {
+public:
+    MOCK_CONST_METHOD0(getNum, int);
+    MOCK_METHOD1(setResult, void, int, value);
+};
+
+TEST(demo, 1) {
+    MockParent p;
+    Target t(&p);
+    EXPECT_CALL(p, getNum())
+        .Times(2)
+        .WillOnce(Return(2))
+        .WillOnce(Return(10));
+
+    EXPECT_EQ(t.doThis(), 10);  // 验证 doThis() 方法的返回值
+}
+
+```
+MockParent 是一个模拟类，用于测试与接口的交互。
+EXPECT_CALL 用于设置期望行为和返回值。
 
 ### 运行测试
 
-编写完测试后，使用以下代码在 main 函数中运行所有测试：
+编写完测试后，使用以下代码在 main 函数中运行所有测试，可输出报告：
 
 ```cpp
 #include "mytest.h"
 
 int main() {
-    return UnitTest::getInstance().runAllTests();
+    return UnitTest::getInstance().runAllTests("test_report.txt");
 }
+```
+运行所有测试并将结果输出到指定的报告文件中。
+
 
 ### 断言详解
 

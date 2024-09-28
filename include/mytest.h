@@ -8,5 +8,6 @@
 #include "mytest/test_suite.h"
 #include "mytest/parameterized_test_params.h"
 #include "mytest/fixture_template.h"
+#include "mytest/data_loaders.h"
 
 #endif // MYTEST_H
